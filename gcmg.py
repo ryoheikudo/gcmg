@@ -92,7 +92,13 @@ def generate_commit_message(
     default=None,
     help="Override the system prompt",
 )
-def main(model, sign_off, commit, amend, system_prompt):
+def main(
+    model: str,
+    sign_off: bool,
+    commit: bool,
+    amend: bool,
+    system_prompt: Optional[str],
+):
     """Generate a git commit message from your staged changes."""
 
     # ------------------------------------------------------------------
@@ -142,5 +148,16 @@ def main(model, sign_off, commit, amend, system_prompt):
         subprocess.check_call(cmd)
         click.echo("✅ Commit succeeded!")
 
+# --------------------------------------------------------------------
+# Wrapper for `console_scripts` entry point (kept if you prefer a thin wrapper)
+# --------------------------------------------------------------------
+def gcmg_main() -> None:
+    """Wrapper for console‑scripts entry point."""
+    # `click` handles argv automatically; no manual slicing needed.
+    main()  # Click will call this with the parsed options
+
+# --------------------------------------------------------------------
+# Stand‑alone usage
+# --------------------------------------------------------------------
 if __name__ == "__main__":
-    main()
+    main()  # Click will parse sys.argv automatically

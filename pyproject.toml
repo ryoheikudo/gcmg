@@ -1,0 +1,13 @@
+[project]
+name = "gcmg"
+version = "0.1.0"
+description = "git commit message generator"
+requires-python = ">=3.8"
+dependencies = ["click"]
+
+[project.scripts]
+gcmg = "gcmg:gcmg_main"
+
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
