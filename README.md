@@ -1,103 +1,121 @@
-# gcmg – Git Commit Message Generator
+# gcmg – Git Commit Message Generator  
 
-**gcmg** is a little‑ish CLI tool that reads the diff of the files you’ve staged, sends it to an 
-Ollama‑powered large‑language‑model (LLM) and turns it into a *conventional‑commit* style 
-message (and, if you tell it, actually commits it for you).
+**gcmg** is a lightweight CLI that reads the diff of your staged files, sends it to an Ollama‑powered large‑language‑model (LLM), and produces a *Conventional‑Commit* style commit message.  If you need, it can also apply that message to the commit or amend the last commit.  
 
-> *Ideal for developers who want AI‑generated commit messages in one swoop.*
+> *Ideal for developers who want instant, AI‑generated commit messages.*
 
----
-
-## ✏️  Prerequisites
-
-| Item      | How to install                                 |
-|-----------|------------------------------------------------|
-| **Python 3.9+** | `apt install python3 python3‑venv` (Debian/Ubuntu) |
-| **Ollama**      | `curl -fsSL https://ollama.ai/install.sh | sh`<br>`ollama serve`<br>`ollama run gpt‑oss:20b` |
-| **Git**         | `apt install git` |
-
-> **Heads‑up:** the LLM itself must be accessible – make sure `ollama serve` is running before 
-you launch gcmg.
+**Repository:** <https://github.com/ryoheikudo/gcmg>  
 
 ---
 
-##  Getting Started
+## ✏️  Prerequisites  
+
+- Python
+- Ollama
+- Git
+
+> **Heads‑up:** The LLM must be reachable – be sure that `ollama serve` is running before launching **gcmg**.
+
+---
+
+## Getting Started
 
 ```bash
-# 1. Fetch the repo (or create a new folder)
-mkdir gcmg && cd gcmg
-# 2. (If you clone from a Git repo, skip 1.)
+# 1. Create a folder for the repo (or skip if you cloned)
+git clone git@github.com:ryoheikudo/gcmg.git
 
-# 3. Set up a virtual‑env
+# 2. Create a virtual‑environment
 python3 -m venv .venv
 source .venv/bin/activate
 
-# 4. Install dependencies + console script
+# 3. Install the package in editable mode
 pip install -r requirements.txt
-pip install -e .           # installs the `gcmg` command
+pip install -e .           # installs the console script “gcmg”
 
-# 5. (Optional) Verify that the script runs
+# 4. (Optional) Verify the script
 gcmg --help
 ```
 
 ---
 
-## 📦  Installation as a package
+## 🚀 Running `gcmg` from Any Directory (PATH Setup)
 
-If you’ve just built the project locally, the console entry‑point `gcmg` is installed with `pip`.  
-Once installed you can drop the `python gcmg.py` trick and just run:
+When you run `pip install -e .`, the `gcmg` script is placed in your virtual environment’s `bin` directory (`Scripts` on Windows).
+Add that directory to your `PATH` to run `gcmg` from anywhere.
 
 ```bash
+# Activate the virtual environment
+source .venv/bin/activate
+
+# Go to the bin directory and get its full path
+cd .venv/bin
+VENV_BIN=$(pwd)
+
+# Permanently add it to PATH (Bash/Zsh)
+echo "export PATH=\"$VENV_BIN:\$PATH\"" >> ~/.zshrc
+source ~/.zshrc
+```
+
+Verify:
+
+```bash
+cd /any/directory
 gcmg --help
 ```
 
-If you prefer a development install that picks up local changes, use `pip install -e .` instead of the command‑line installs above.
+> 💡 If you activate the virtual environment every time (`source .venv/bin/activate`), you don’t need to change your PATH manually.
+ 
+---
+
+## 📦 Installation as a package  
+
+Installing the package (e.g. with `pip install -e .`) places the console script `gcmg` in the virtual‑environment’s `bin` directory.  Once the environment is activated, you can run `gcmg` without any additional work.
 
 ---
 
 ## 🚀  Usage
 
 ```bash
-# 1. Stage any changes you want to commit
+# 1. Stage the changes you want to commit
 git add .
 
-# 2. Dry‑run: just show what the commit message would look like
-gcmg                         # ← prints the message and exits
+# 2. Dry‑run: see what the commit message will look like
+gcmg                     # prints the message and exits
 
-# 3. Commit immediately (adds a new commit)
-gcmg --commit                # ← commits automatically
+# 3. Commit immediately (creates a new commit)
+gcmg --commit             # commits automatically
 
-# 4. Add a Signed‑off‑by line
-gcmg --sign-off              # ← includes a Signed‑off‑by header
+# 4. Add a *Signed‑off‑by* line
+gcmg --sign-off           # includes a Signed‑off‑by header
 
 # 5. Use a different model
-gcmg --model gpt‑oss:20b
+gcmg --model gpt-oss:20b
 
-# 6. Amend the most recent commit without creating a new one
+# 6. Amend the most recent commit without adding a new one
 gcmg --amend
 
 # 7. Skip committing or amending – just preview
-gcmg --no-commit             # same as the default dry‑run
+gcmg --no-commit          # same as the default dry‑run
 ```
 
-You can combine flags:
+Flags can be combined:
 
 ```bash
-gcmg --amend --sign-off -m gpt‑oss:20b
+gcmg --amend --sign-off -m gpt-oss:20b
 ```
 
-### ⚡️  Quick‑start
+### ⚡  Quick‑start  
 
-*If you only wish to preview, run `gcmg` without staging any files – the script will abort gracefully, so you can use it safely in any repository.*
-
----
-
-## 📜  License
-
-MIT © 2025
+If you’d only like a preview, simply run `gcmg` without staging any files – the script will abort gracefully, making it safe to use in any repository.
 
 ---
 
-## 👷  Contributing
+## 📜  License  
 
-Feel free to open issues or pull requests – the project is intentionally minimal, and any enhancements are very welcome.
+MIT © 2025  
+
+---
+
+## 👷  Contributing  
+
+Feel free to open issues or submit pull requests – the project is intentionally minimal, and any enhancements are welcome.
